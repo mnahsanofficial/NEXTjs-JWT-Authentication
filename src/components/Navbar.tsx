@@ -10,7 +10,7 @@ const Navbar = () => {
     <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <Link href="/" className="text-xl font-bold text-primary-600">
-          AuthApp
+          NEXTAuthApp
         </Link>
         <div className="flex space-x-4">
           {user ? (
