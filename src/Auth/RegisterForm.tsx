@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '../context/AuthContext';
+import Link from 'next/link';
 
-const RegisterForm = () => {
+const RegisterPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   const { register } = useAuth();
   const router = useRouter();
 
@@ -14,76 +15,85 @@ const RegisterForm = () => {
     e.preventDefault();
     try {
       await register(name, email, password);
-    } catch (err) {
-      setError('Registration failed. Please try again.');
+      setNotification({ message: 'Registration successful! Redirecting to login...', type: 'success' });
+      setTimeout(() => router.push('/login'), 2000);
+    } catch (error) {
+      setNotification({ message: 'Registration failed. Please try again.', type: 'error' });
     }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Register</h1>
-      {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
-          {error}
+    <div className="auth-container">
+      {notification && (
+        <div className={`notification notification-${notification.type}`}>
+          {notification.message}
         </div>
       )}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-            Name
-          </label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-            required
-          />
-        </div>
-        <div>
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-          >
-            Register
+      
+      <div className="auth-card">
+        <h1 className="auth-title">Create Account</h1>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              Full Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="auth-input"
+              placeholder="John Doe"
+              required
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              Email Address
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="auth-input"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="auth-input"
+              placeholder="••••••••"
+              minLength={6}
+              required
+            />
+          </div>
+          
+          <button type="submit" className="auth-button">
+            Sign Up
           </button>
+        </form>
+        
+        <div className="text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <Link href="/login" className="auth-link">
+            Sign in
+          </Link>
         </div>
-      </form>
-      <div className="mt-4 text-center text-sm text-gray-600">
-        Already have an account?{' '}
-        <a href="/login" className="font-medium text-primary-600 hover:text-primary-500">
-          Login
-        </a>
       </div>
     </div>
   );
 };
 
-export default RegisterForm;
+export default RegisterPage;
