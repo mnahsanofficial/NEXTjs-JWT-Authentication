@@ -16,8 +16,8 @@ const LoginPage = () => {
       e.preventDefault();
       try {
         await login(email, password);
-        addNotification('Login successful! Redirecting to dashboard...', 'success');
         setTimeout(() => router.push('/dashboard'), 1500);
+        addNotification('Login successful! Redirecting to dashboard...', 'success');
       } catch (error) {
         addNotification('Invalid email or password', 'error');
       }

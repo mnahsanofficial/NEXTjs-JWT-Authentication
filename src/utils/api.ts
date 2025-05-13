@@ -45,3 +45,12 @@ export const getUser = async (): Promise<ApiResponse> => {
   });
   return response.json();
 };
+
+export const getRemainingRequests = async (): Promise<number> => {
+  const response = await fetch(`${API_URL}/api/remaining-requests`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+  const data = await response.json();
+  return data.remaining || 0;
+};

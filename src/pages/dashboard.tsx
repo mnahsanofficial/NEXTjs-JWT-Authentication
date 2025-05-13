@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import Notification from '../components/Notification';
 import { useNotification } from '@/context/NotificationContext';
+import ChatInterface from '@/components/ChatInterface';
 
 const Dashboard = () => {
     const { user, logout, loading } = useAuth();
@@ -54,6 +55,10 @@ const Dashboard = () => {
         <div className="bg-white shadow rounded-lg p-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Your Dashboard</h2>
           <p className="text-gray-600">You're now logged in and can access all features.</p>
+        </div>
+
+        <div className="bg-white shadow rounded-lg p-6">
+          <ChatInterface></ChatInterface>
         </div>
       </div>
     </div>
